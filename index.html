@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#1a3a5c" />
 <title>IB Bridge — Your bridge to IB success</title>
-<meta name="description" content="IB Bridge offers online one-to-one tutoring by IB Diploma graduates studying at top universities worldwide. MYP & Diploma support, exam prep, IA and Extended Essay guidance. In-person sessions in Madrid." />
+<meta name="description" content="IB Bridge offers online one-to-one tutoring by IB Diploma graduates studying at top universities worldwide. MYP & Diploma support, exam prep, IA and Extended Essay guidance." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -17,33 +17,46 @@
 <header class="site-header" id="top">
   <div class="container header-inner">
     <a class="brand" href="#top" aria-label="IB Bridge home">
-      <svg class="brand-logo" viewBox="0 0 300 132" role="img" aria-label="IB Bridge logo">
-        <!-- bridge arch -->
-        <path d="M28 46 C110 6, 190 6, 272 46" fill="none" stroke="#2ba7ad" stroke-width="7" stroke-linecap="round"/>
-        <path d="M50 40 C112 14, 188 14, 250 40" fill="none" stroke="#7fd0d3" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
-        <!-- deck -->
-        <rect x="34" y="50" width="232" height="9" rx="4" fill="#2ba7ad"/>
-        <!-- pillars -->
-        <rect x="112" y="59" width="7" height="20" fill="#2ba7ad"/>
-        <rect x="142" y="59" width="7" height="20" fill="#2ba7ad"/>
-        <rect x="172" y="59" width="7" height="20" fill="#2ba7ad"/>
-        <rect x="202" y="59" width="7" height="20" fill="#2ba7ad"/>
-        <!-- wordmark, clearly below the bridge -->
-        <text x="150" y="122" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700">
-          <tspan fill="#1a3a5c">IB </tspan><tspan fill="#2ba7ad">Bridge</tspan>
+      <svg class="brand-logo" viewBox="0 0 320 150" role="img" aria-label="IB Bridge — Your bridge to IB success">
+        <!-- main suspension cable: long graceful sweep, dips low and past the deck on the left -->
+        <path d="M20 74 C58 40, 150 24, 296 46" fill="none" stroke="#2ba7ad" stroke-width="6.5" stroke-linecap="round"/>
+        <!-- inner lighter cable -->
+        <path d="M64 66 C110 46, 190 40, 288 52" fill="none" stroke="#7fd0d3" stroke-width="4" stroke-linecap="round" opacity="0.95"/>
+        <!-- deck (bold) -->
+        <rect x="58" y="63" width="232" height="10" rx="3" fill="#2ba7ad"/>
+        <!-- suspension pillars: short, evenly spaced -->
+        <rect x="150" y="46" width="6" height="17" fill="#2ba7ad"/>
+        <rect x="178" y="44" width="6" height="19" fill="#2ba7ad"/>
+        <rect x="206" y="45" width="6" height="18" fill="#2ba7ad"/>
+        <rect x="234" y="48" width="6" height="15" fill="#2ba7ad"/>
+        <!-- wordmark: IB heavier than Bridge -->
+        <text x="160" y="114" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="47">
+          <tspan fill="#1a3a5c" font-weight="700">IB </tspan><tspan fill="#2ba7ad" font-weight="600">Bridge</tspan>
         </text>
+        <!-- tagline framed by dashes -->
+        <g fill="#1a3a5c">
+          <rect x="46" y="135" width="18" height="2" rx="1"/>
+          <text x="160" y="140" text-anchor="middle" font-family="'Nunito Sans', Arial, sans-serif" font-size="14.5" letter-spacing="0.3">Your bridge to IB success</text>
+          <rect x="256" y="135" width="18" height="2" rx="1"/>
+        </g>
       </svg>
     </a>
-    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="header-tools">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="en">EN</button>
+        <span class="lang-sep">|</span>
+        <button type="button" class="lang-btn" data-lang="es">ES</button>
+      </div>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
     <nav class="nav" id="nav-menu">
-      <a href="#about">About</a>
-      <a href="#offer">Services</a>
-      <a href="#support">Who we help</a>
-      <a href="#madrid">In-person</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#contact" class="nav-cta">Contact</a>
+      <a href="#about" data-en="About" data-es="Nosotros">About</a>
+      <a href="#offer" data-en="Services" data-es="Servicios">Services</a>
+      <a href="#support" data-en="Who we help" data-es="A quién ayudamos">Who we help</a>
+      <a href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
+      <a href="#contact" class="nav-cta" data-en="Contact" data-es="Contacto">Contact</a>
     </nav>
   </div>
 </header>
@@ -51,21 +64,24 @@
 <!-- ===== Hero ===== -->
 <section class="hero">
   <div class="container hero-inner">
-    <p class="eyebrow">Your bridge to IB success</p>
-    <h1>Online IB tutoring from graduates who've been there.</h1>
-    <p class="hero-sub">
+    <p class="eyebrow" data-en="Your bridge to IB success" data-es="Tu puente hacia el éxito en el IB">Your bridge to IB success</p>
+    <h1 data-en="Online IB tutoring from graduates who've been there."
+        data-es="Clases online del IB con graduados que ya lo han vivido.">Online IB tutoring from graduates who've been there.</h1>
+    <p class="hero-sub"
+       data-en="One-to-one support from recent IB Diploma graduates now studying at top universities worldwide — in the very subjects they excelled in. Clarity, structure, and perspective to bridge the gap between high school and university."
+       data-es="Apoyo individual de graduados recientes del Diploma del IB que ahora estudian en las mejores universidades del mundo, en las mismas materias en las que destacaron. Claridad, estructura y perspectiva para tender un puente entre el colegio y la universidad.">
       One-to-one support from recent IB Diploma graduates now studying at top universities
       worldwide — in the very subjects they excelled in. Clarity, structure, and perspective
       to bridge the gap between high school and university.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#contact">Book a session</a>
-      <a class="btn btn-ghost" href="#offer">See what we offer</a>
+      <a class="btn btn-primary" href="#contact" data-en="Book a session" data-es="Reserva una sesión">Book a session</a>
+      <a class="btn btn-ghost" href="#offer" data-en="See what we offer" data-es="Ver qué ofrecemos">See what we offer</a>
     </div>
     <ul class="hero-badges">
-      <li>IB &amp; MYP levels</li>
-      <li>Top-university tutors</li>
-      <li>Flexible scheduling</li>
+      <li data-en="IB &amp; MYP levels" data-es="Niveles IB y MYP">IB &amp; MYP levels</li>
+      <li data-en="Top-university tutors" data-es="Tutores de primeras universidades">Top-university tutors</li>
+      <li data-en="Flexible scheduling" data-es="Horarios flexibles">Flexible scheduling</li>
     </ul>
   </div>
 </section>
@@ -73,21 +89,31 @@
 <!-- ===== About ===== -->
 <section class="section" id="about">
   <div class="container narrow">
-    <span class="kicker">About us</span>
-    <h2>Founded by graduates who lived the IB</h2>
-    <p>
+    <span class="kicker" data-en="About us" data-es="Sobre nosotros">About us</span>
+    <h2 data-en="Founded by graduates who lived the IB"
+        data-es="Fundada por graduados que vivieron el IB">Founded by graduates who lived the IB</h2>
+    <p data-en="IB Bridge is a mentoring and academic support initiative founded by recent IB Diploma graduates who are now in their first year of university. Having completed the IB programme ourselves, we understand its academic intensity, structure, and expectations — not from theory, but from lived experience."
+       data-es="IB Bridge es una iniciativa de mentoría y apoyo académico fundada por graduados recientes del Diploma del IB que ahora cursan su primer año de universidad. Habiendo completado nosotros mismos el programa del IB, entendemos su intensidad académica, su estructura y sus exigencias, no desde la teoría, sino desde la experiencia vivida.">
       IB Bridge is a mentoring and academic support initiative founded by recent IB Diploma
       graduates who are now in their first year of university. Having completed the IB programme
       ourselves, we understand its academic intensity, structure, and expectations — not from
       theory, but from lived experience.
     </p>
-    <p>
+    <p data-en="Today, our tutors are pursuing degrees aligned with the subjects they excelled in during the IB. This means students are guided by individuals who have not only achieved strong results, but are continuing to build expertise in those fields at university level."
+       data-es="Hoy, nuestros tutores cursan carreras alineadas con las materias en las que destacaron durante el IB. Esto significa que los estudiantes reciben la guía de personas que no solo obtuvieron excelentes resultados, sino que siguen desarrollando su experiencia en esos campos a nivel universitario.">
       Today, our tutors are pursuing degrees aligned with the subjects they excelled in during
       the IB. This means students are guided by individuals who have not only achieved strong
       results, but are continuing to build expertise in those fields at university level.
     </p>
-    <p class="lead-quote">
+    <p class="lead-quote"
+       data-en="We bridge the gap between high school and higher education — with clarity, structure, and perspective."
+       data-es="Tendemos un puente entre el colegio y la educación superior, con claridad, estructura y perspectiva.">
       We bridge the gap between high school and higher education — with clarity, structure, and perspective.
+    </p>
+    <p class="founder-note"
+       data-en="IB Bridge was founded by Sofia, a 40-point IB graduate, who created the initiative and leads it as CEO."
+       data-es="IB Bridge fue fundada por Sofía, graduada del IB con 40 puntos, quien creó la iniciativa y la dirige como CEO.">
+      IB Bridge was founded by <strong>Sofia</strong>, a 40-point IB graduate, who created the initiative and leads it as CEO.
     </p>
   </div>
 </section>
@@ -95,50 +121,56 @@
 <!-- ===== What we offer ===== -->
 <section class="section section-alt" id="offer">
   <div class="container">
-    <span class="kicker">What we offer</span>
-    <h2>Support built around the IB</h2>
+    <span class="kicker" data-en="What we offer" data-es="Qué ofrecemos">What we offer</span>
+    <h2 data-en="Support built around the IB" data-es="Apoyo diseñado en torno al IB">Support built around the IB</h2>
     <div class="card-grid">
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5.5"/><path d="M22 8v5"/></svg>
         </span>
-        <h3>Online one-to-one tutoring</h3>
-        <p>Focused, personalised sessions matched to your goals and pace.</p>
+        <h3 data-en="Online one-to-one tutoring" data-es="Clases online individuales">Online one-to-one tutoring</h3>
+        <p data-en="Focused, personalised sessions matched to your goals and pace."
+           data-es="Sesiones personalizadas y enfocadas, adaptadas a tus objetivos y a tu ritmo.">Focused, personalised sessions matched to your goals and pace.</p>
       </div>
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4Z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20Z"/></svg>
         </span>
-        <h3>IB &amp; Secondary support</h3>
-        <p>Help across the Diploma Programme and pre-IB / secondary levels.</p>
+        <h3 data-en="IB &amp; Secondary support" data-es="Apoyo IB y Secundaria">IB &amp; Secondary support</h3>
+        <p data-en="Help across the Diploma Programme and pre-IB / secondary levels."
+           data-es="Ayuda en el Programa del Diploma y en niveles pre-IB / secundaria.">Help across the Diploma Programme and pre-IB / secondary levels.</p>
       </div>
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/><path d="M9 13l2 2 4-4"/></svg>
         </span>
-        <h3>Exam preparation</h3>
-        <p>Strategic practice and technique to walk into exams with confidence.</p>
+        <h3 data-en="Exam preparation" data-es="Preparación de exámenes">Exam preparation</h3>
+        <p data-en="Strategic practice and technique to walk into exams with confidence."
+           data-es="Práctica estratégica y técnica para afrontar los exámenes con confianza.">Strategic practice and technique to walk into exams with confidence.</p>
       </div>
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6.5L4.6 17a2 2 0 0 0 1.8 3h11.2a2 2 0 0 0 1.8-3L15 9.5V3"/><path d="M8 3h8"/><path d="M7.5 14h9"/></svg>
         </span>
-        <h3>Internal Assessment guidance</h3>
-        <p>Structure, feedback, and refinement for your IAs.</p>
+        <h3 data-en="Internal Assessment guidance" data-es="Guía de Internal Assessment (IA)">Internal Assessment guidance</h3>
+        <p data-en="Structure, feedback, and refinement for your IAs."
+           data-es="Estructura, feedback y perfeccionamiento de tus IAs.">Structure, feedback, and refinement for your IAs.</p>
       </div>
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.5 1-2.1A6 6 0 0 0 12 3Z"/></svg>
         </span>
-        <h3>Homework &amp; concept support</h3>
-        <p>Reinforce understanding and close gaps as they appear.</p>
+        <h3 data-en="Homework &amp; concept support" data-es="Apoyo con deberes y conceptos">Homework &amp; concept support</h3>
+        <p data-en="Reinforce understanding and close gaps as they appear."
+           data-es="Refuerza la comprensión y cierra las lagunas a medida que surgen.">Reinforce understanding and close gaps as they appear.</p>
       </div>
       <div class="card">
         <span class="card-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M9 14l2 2 4-4"/></svg>
         </span>
-        <h3>Flexible scheduling</h3>
-        <p>Sessions that fit around school, activities, and time zones.</p>
+        <h3 data-en="Flexible scheduling" data-es="Horarios flexibles">Flexible scheduling</h3>
+        <p data-en="Sessions that fit around school, activities, and time zones."
+           data-es="Sesiones que se adaptan al colegio, las actividades y las zonas horarias.">Sessions that fit around school, activities, and time zones.</p>
       </div>
     </div>
   </div>
@@ -147,93 +179,81 @@
 <!-- ===== Who we support ===== -->
 <section class="section" id="support">
   <div class="container">
-    <span class="kicker">Who we support</span>
-    <h2>Wherever you are in the journey</h2>
+    <span class="kicker" data-en="Who we support" data-es="A quién apoyamos">Who we support</span>
+    <h2 data-en="Wherever you are in the journey" data-es="En cualquier etapa del camino">Wherever you are in the journey</h2>
     <div class="support-grid">
       <div class="support-col">
-        <h3>Pre-IB / MYP students</h3>
+        <h3 data-en="Pre-IB / MYP students" data-es="Estudiantes Pre-IB / MYP">Pre-IB / MYP students</h3>
         <ul class="checklist">
-          <li>Subject content</li>
-          <li>Essay writing</li>
-          <li>Exam prep</li>
-          <li>Study strategies</li>
-          <li>E-assessment preparation</li>
-          <li>Completing e-portfolios</li>
+          <li data-en="Subject content" data-es="Contenido de las asignaturas">Subject content</li>
+          <li data-en="Essay writing" data-es="Redacción de ensayos">Essay writing</li>
+          <li data-en="Exam prep" data-es="Preparación de exámenes">Exam prep</li>
+          <li data-en="Study strategies" data-es="Estrategias de estudio">Study strategies</li>
+          <li data-en="E-assessment preparation" data-es="Preparación de e-assessment">E-assessment preparation</li>
+          <li data-en="Completing e-portfolios" data-es="Elaboración de e-portfolios">Completing e-portfolios</li>
         </ul>
       </div>
       <div class="support-col">
-        <h3>IB Diploma students <span>(Year 1 &amp; Year 2)</span></h3>
+        <h3 data-en="IB Diploma students (Year 1 &amp; Year 2)" data-es="Estudiantes del Diploma IB (1.º y 2.º año)">IB Diploma students <span>(Year 1 &amp; Year 2)</span></h3>
         <ul class="checklist">
-          <li>Strengthen understanding of course material</li>
-          <li>Refine Internal Assessments</li>
-          <li>Develop Extended Essay structure</li>
-          <li>Prepare strategically for exams</li>
-          <li>Build confidence under pressure</li>
+          <li data-en="Strengthen understanding of course material" data-es="Reforzar la comprensión del contenido del curso">Strengthen understanding of course material</li>
+          <li data-en="Refine Internal Assessments" data-es="Perfeccionar los Internal Assessments">Refine Internal Assessments</li>
+          <li data-en="Develop Extended Essay structure" data-es="Desarrollar la estructura del Extended Essay">Develop Extended Essay structure</li>
+          <li data-en="Prepare strategically for exams" data-es="Prepararse de forma estratégica para los exámenes">Prepare strategically for exams</li>
+          <li data-en="Build confidence under pressure" data-es="Ganar confianza bajo presión">Build confidence under pressure</li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===== In-person Madrid ===== -->
-<section class="section section-madrid" id="madrid">
-  <div class="container narrow">
-    <span class="kicker light">In person · Madrid</span>
-    <h2>Meet Sofia, one-to-one in Madrid</h2>
-    <p>
-      Based in Madrid? Sofia — an IB graduate with <strong>40 points</strong> — offers in-person,
-      one-to-one sessions in the city. Face-to-face support with the same clarity and structure,
-      tailored to exactly what you need.
-    </p>
-    <a class="btn btn-primary" href="#contact">Arrange an in-person session</a>
   </div>
 </section>
 
 <!-- ===== Pricing ===== -->
 <section class="section section-alt" id="pricing">
   <div class="container">
-    <span class="kicker">Pricing</span>
-    <h2>Simple, transparent rates</h2>
+    <span class="kicker" data-en="Pricing" data-es="Precios">Pricing</span>
+    <h2 data-en="Simple, transparent rates" data-es="Precios claros y sencillos">Simple, transparent rates</h2>
     <div class="price-grid">
       <div class="price-card">
-        <h3>MYP / Pre-IB</h3>
-        <p class="price"><span class="amount">€25</span><span class="unit">/ hour</span></p>
+        <h3 data-en="MYP / Pre-IB" data-es="MYP / Pre-IB">MYP / Pre-IB</h3>
+        <p class="price"><span class="amount">€25</span><span class="unit" data-en="/ hour" data-es="/ hora">/ hour</span></p>
         <ul class="checklist">
-          <li>Subject content &amp; essay writing</li>
-          <li>Exam prep &amp; study strategies</li>
-          <li>E-assessment &amp; e-portfolios</li>
+          <li data-en="Subject content &amp; essay writing" data-es="Contenido de asignaturas y redacción">Subject content &amp; essay writing</li>
+          <li data-en="Exam prep &amp; study strategies" data-es="Preparación de exámenes y estrategias de estudio">Exam prep &amp; study strategies</li>
+          <li data-en="E-assessment &amp; e-portfolios" data-es="E-assessment y e-portfolios">E-assessment &amp; e-portfolios</li>
         </ul>
-        <a class="btn btn-ghost" href="#contact">Get started</a>
+        <a class="btn btn-ghost" href="#contact" data-en="Get started" data-es="Empezar">Get started</a>
       </div>
       <div class="price-card featured">
-        <span class="tag">Diploma Programme</span>
-        <h3>IB Diploma (DP)</h3>
-        <p class="price"><span class="amount">€30</span><span class="unit">/ hour</span></p>
+        <span class="tag" data-en="Diploma Programme" data-es="Programa del Diploma">Diploma Programme</span>
+        <h3 data-en="IB Diploma (DP)" data-es="Diploma del IB (DP)">IB Diploma (DP)</h3>
+        <p class="price"><span class="amount">€30</span><span class="unit" data-en="/ hour" data-es="/ hora">/ hour</span></p>
         <ul class="checklist">
-          <li>Course material &amp; IA refinement</li>
-          <li>Extended Essay structure</li>
-          <li>Strategic exam preparation</li>
+          <li data-en="Course material &amp; IA refinement" data-es="Contenido del curso y perfeccionamiento de IA">Course material &amp; IA refinement</li>
+          <li data-en="Extended Essay structure" data-es="Estructura del Extended Essay">Extended Essay structure</li>
+          <li data-en="Strategic exam preparation" data-es="Preparación estratégica de exámenes">Strategic exam preparation</li>
         </ul>
-        <a class="btn btn-primary" href="#contact">Get started</a>
+        <a class="btn btn-primary" href="#contact" data-en="Get started" data-es="Empezar">Get started</a>
       </div>
     </div>
-    <p class="price-note">All tutors are IB graduates now studying at top universities worldwide.</p>
+    <p class="price-note"
+       data-en="All tutors are IB graduates now studying at top universities worldwide."
+       data-es="Todos nuestros tutores son graduados del IB que ahora estudian en las mejores universidades del mundo.">All tutors are IB graduates now studying at top universities worldwide.</p>
   </div>
 </section>
 
 <!-- ===== Contact ===== -->
 <section class="section section-contact" id="contact">
   <div class="container narrow">
-    <span class="kicker light">Contact us</span>
-    <h2>Ready to get started?</h2>
-    <p>Send us a text with:</p>
+    <span class="kicker light" data-en="Contact us" data-es="Contáctanos">Contact us</span>
+    <h2 data-en="Ready to get started?" data-es="¿List@ para empezar?">Ready to get started?</h2>
+    <p data-en="Send us a text with:" data-es="Envíanos un mensaje con:">Send us a text with:</p>
     <ul class="checklist contact-list">
-      <li>The subject you're interested in</li>
-      <li>Your grade level</li>
-      <li>Your availability</li>
+      <li data-en="The subject you're interested in" data-es="La asignatura que te interesa">The subject you're interested in</li>
+      <li data-en="Your grade level" data-es="Tu curso o nivel">Your grade level</li>
+      <li data-en="Your availability" data-es="Tu disponibilidad">Your availability</li>
     </ul>
     <div class="contact-actions">
-      <a class="btn btn-primary" href="https://wa.me/34686959012" target="_blank" rel="noopener">Message on WhatsApp</a>
+      <a class="btn btn-primary" href="https://wa.me/34686959012" target="_blank" rel="noopener" data-en="Message on WhatsApp" data-es="Escríbenos por WhatsApp">Message on WhatsApp</a>
       <a class="btn btn-ghost" href="tel:+34686959012">Call +34 686 959 012</a>
     </div>
   </div>
@@ -243,12 +263,12 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <p class="footer-brand">IB Bridge</p>
-    <p class="footer-tag">Your bridge to IB success</p>
+    <p class="footer-tag" data-en="Your bridge to IB success" data-es="Tu puente hacia el éxito en el IB">Your bridge to IB success</p>
     <p class="footer-contact">
       <a href="tel:+34686959012">+34 686 959 012</a> ·
       <a href="https://wa.me/34686959012" target="_blank" rel="noopener">WhatsApp</a>
     </p>
-    <p class="footer-fine">© <span id="year"></span> IB Bridge. All rights reserved.</p>
+    <p class="footer-fine">© <span id="year"></span> IB Bridge. <span data-en="All rights reserved." data-es="Todos los derechos reservados.">All rights reserved.</span></p>
   </div>
 </footer>
 
