@@ -56,8 +56,7 @@ a { color: var(--teal-dark); text-decoration: none; }
 /* ===== Header ===== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(255,255,255,.92);
-  backdrop-filter: saturate(180%) blur(10px);
+  background: #fbfbfc; /* matches the logo image background so it blends seamlessly */
   border-bottom: 1px solid var(--line);
 }
 .header-inner { display: flex; align-items: center; gap: 16px; min-height: 72px; }
