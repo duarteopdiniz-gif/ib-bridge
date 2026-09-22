@@ -56,16 +56,13 @@ a { color: var(--teal-dark); text-decoration: none; }
 /* ===== Header ===== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: #fbfbfc; /* matches the logo image background so it blends seamlessly */
+  background: rgba(255,255,255,.94);
+  backdrop-filter: saturate(180%) blur(10px);
   border-bottom: 1px solid var(--line);
 }
 .header-inner { display: flex; align-items: center; gap: 16px; min-height: 72px; }
 .brand { margin-right: auto; display: flex; align-items: center; }
-.brand-logo {
-  height: 62px; width: auto; display: block;
-  /* blend the logo's light background into the header so no box shows */
-  mix-blend-mode: multiply;
-}
+.brand-logo { height: 62px; width: auto; display: block; }
 .nav { display: flex; align-items: center; gap: 24px; }
 .nav a { color: var(--navy); font-weight: 600; font-size: 15px; }
 .nav a:hover { color: var(--teal-dark); }
