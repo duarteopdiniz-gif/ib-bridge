@@ -34,6 +34,7 @@
       <a href="#offer" data-en="Services" data-es="Servicios">Services</a>
       <a href="#support" data-en="Who we help" data-es="A quién ayudamos">Who we help</a>
       <a href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
+      <a href="#join" data-en="Work with us" data-es="Únete">Work with us</a>
       <a href="#contact" class="nav-cta" data-en="Contact" data-es="Contacto">Contact</a>
     </nav>
   </div>
@@ -236,6 +237,48 @@
     <p class="price-note"
        data-en="All tutors are IB graduates now studying at top universities worldwide."
        data-es="Todos nuestros tutores son graduados del IB que ahora estudian en las mejores universidades del mundo.">All tutors are IB graduates now studying at top universities worldwide.</p>
+  </div>
+</section>
+
+<!-- ===== Work with us (tutor application) ===== -->
+<section class="section section-join" id="join">
+  <div class="container narrow">
+    <span class="kicker" data-en="Work with us" data-es="Únete al equipo">Work with us</span>
+    <h2 data-en="Would you like to tutor with us?" data-es="¿Te gustaría dar clases con nosotros?">Would you like to tutor with us?</h2>
+    <p data-en="If you&rsquo;ve done an international programme and want to help students succeed, we&rsquo;d love to hear from you. Fill in the form below and we&rsquo;ll be in touch."
+       data-es="Si has cursado un programa internacional y quieres ayudar a los estudiantes a tener éxito, nos encantaría conocerte. Rellena el formulario y nos pondremos en contacto.">
+      If you&rsquo;ve done an international programme and want to help students succeed, we&rsquo;d love to hear from you. Fill in the form below and we&rsquo;ll be in touch.
+    </p>
+
+    <form class="join-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
+      <div class="form-row">
+        <label>
+          <span data-en="Full name" data-es="Nombre completo">Full name</span>
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          <span data-en="Country of residence" data-es="País de residencia">Country of residence</span>
+          <input type="text" name="country" required />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>
+          <span data-en="Which international system did you do?" data-es="¿Qué sistema internacional cursaste?">Which international system did you do?</span>
+          <input type="text" name="system" placeholder="IB, A-Levels, AP…" required />
+        </label>
+        <label>
+          <span data-en="Overall grade / score" data-es="Nota / puntuación global">Overall grade / score</span>
+          <input type="text" name="overall_grade" placeholder="e.g. 40/45, A*A*A" required />
+        </label>
+      </div>
+      <label class="form-full">
+        <span data-en="Which subjects would you be comfortable tutoring?" data-es="¿Qué asignaturas te sentirías cómodo/a enseñando?">Which subjects would you be comfortable tutoring?</span>
+        <textarea name="subjects" rows="3" required></textarea>
+      </label>
+      <input type="hidden" name="_subject" value="New IB Bridge tutor application" />
+      <button type="submit" class="btn btn-primary" data-en="Submit application" data-es="Enviar solicitud">Submit application</button>
+      <p class="form-note" data-en="Your application is sent directly to our team." data-es="Tu solicitud se envía directamente a nuestro equipo.">Your application is sent directly to our team.</p>
+    </form>
   </div>
 </section>
 

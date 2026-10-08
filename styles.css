@@ -191,6 +191,29 @@ a { color: var(--teal-dark); text-decoration: none; }
 }
 .founder-note strong { color: var(--teal-dark); }
 
+/* ===== Work with us (form) ===== */
+.section-join { background: var(--bg-alt); }
+.join-form { margin-top: 28px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.join-form label { display: flex; flex-direction: column; gap: 7px; }
+.join-form label > span {
+  font-family: "Poppins", sans-serif; font-weight: 600; font-size: .92rem; color: var(--navy);
+}
+.join-form input, .join-form textarea {
+  width: 100%; padding: 12px 14px; font: inherit; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.join-form input::placeholder, .join-form textarea::placeholder { color: #9fb0b8; }
+.join-form input:focus, .join-form textarea:focus {
+  outline: none; border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(43,167,173,.18);
+}
+.join-form textarea { resize: vertical; }
+.form-full { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+.join-form .btn-primary { border: 0; }
+.form-note { margin-top: 14px; font-size: .85rem; color: var(--ink-soft); }
+
 /* ===== Pricing ===== */
 .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; max-width: 800px; }
 .price-card {
@@ -259,6 +282,7 @@ a { color: var(--teal-dark); text-decoration: none; }
   .price-grid { grid-template-columns: 1fr; }
   .hero { padding: 56px 0 52px; }
   .hero-stats { grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+  .form-row { grid-template-columns: 1fr; gap: 18px; }
   .section { padding: 52px 0; }
   .hero-actions .btn, .contact-actions .btn { flex: 1 1 auto; }
 }
