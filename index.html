@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=20260922g" />
+<link rel="stylesheet" href="styles.css?v=20260922h" />
 </head>
 <body>
 
@@ -36,6 +36,7 @@
       <a href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
       <a href="#join" data-en="Work with us" data-es="Únete">Work with us</a>
       <a href="#contact" class="nav-cta" data-en="Contact" data-es="Contacto">Contact</a>
+      <!-- nav order kept; Contact stays the highlighted CTA -->
     </nav>
   </div>
 </header>
@@ -240,6 +241,23 @@
   </div>
 </section>
 
+<!-- ===== Contact ===== -->
+<section class="section section-contact" id="contact">
+  <div class="container narrow">
+    <span class="kicker light" data-en="Contact us" data-es="Contáctanos">Contact us</span>
+    <h2 data-en="Ready to get started?" data-es="¿List@ para empezar?">Ready to get started?</h2>
+    <p data-en="Send us a text with:" data-es="Envíanos un mensaje con:">Send us a text with:</p>
+    <ul class="checklist contact-list">
+      <li data-en="The subject you're interested in" data-es="La asignatura que te interesa">The subject you're interested in</li>
+      <li data-en="Your grade level" data-es="Tu curso o nivel">Your grade level</li>
+      <li data-en="Your availability" data-es="Tu disponibilidad">Your availability</li>
+    </ul>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="https://wa.me/34686959012" target="_blank" rel="noopener" data-en="Message on WhatsApp" data-es="Escríbenos por WhatsApp">Message on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
 <!-- ===== Work with us (tutor application) ===== -->
 <section class="section section-join" id="join">
   <div class="container narrow">
@@ -263,40 +281,22 @@
       </div>
       <div class="form-row">
         <label>
-          <span data-en="Which international system did you do?" data-es="¿Qué sistema internacional cursaste?">Which international system did you do?</span>
-          <input type="text" name="system" placeholder="IB, A-Levels, AP…" required />
+          <span data-en="At which IB school did you study?" data-es="¿En qué colegio IB estudiaste?">At which IB school did you study?</span>
+          <input type="text" name="ib_school" required />
         </label>
         <label>
           <span data-en="Overall grade / score" data-es="Nota / puntuación global">Overall grade / score</span>
-          <input type="text" name="overall_grade" placeholder="e.g. 40/45, A*A*A" required />
+          <input type="text" name="overall_grade" placeholder="e.g. 40/45" required />
         </label>
       </div>
       <label class="form-full">
-        <span data-en="Which subjects would you be comfortable tutoring?" data-es="¿Qué asignaturas te sentirías cómodo/a enseñando?">Which subjects would you be comfortable tutoring?</span>
-        <textarea name="subjects" rows="3" required></textarea>
+        <span data-en="What subjects made up your IB diploma + grades?" data-es="¿Qué asignaturas formaron tu diploma del IB y qué notas sacaste?">What subjects made up your IB diploma + grades?</span>
+        <textarea name="subjects_grades" rows="3" placeholder="e.g. Maths AA HL 7, Physics HL 6, English A SL 7…" required></textarea>
       </label>
       <input type="hidden" name="_subject" value="New IB Bridge tutor application" />
       <button type="submit" class="btn btn-primary" data-en="Submit application" data-es="Enviar solicitud">Submit application</button>
       <p class="form-note" data-en="Your application is sent directly to our team." data-es="Tu solicitud se envía directamente a nuestro equipo.">Your application is sent directly to our team.</p>
     </form>
-  </div>
-</section>
-
-<!-- ===== Contact ===== -->
-<section class="section section-contact" id="contact">
-  <div class="container narrow">
-    <span class="kicker light" data-en="Contact us" data-es="Contáctanos">Contact us</span>
-    <h2 data-en="Ready to get started?" data-es="¿List@ para empezar?">Ready to get started?</h2>
-    <p data-en="Send us a text with:" data-es="Envíanos un mensaje con:">Send us a text with:</p>
-    <ul class="checklist contact-list">
-      <li data-en="The subject you're interested in" data-es="La asignatura que te interesa">The subject you're interested in</li>
-      <li data-en="Your grade level" data-es="Tu curso o nivel">Your grade level</li>
-      <li data-en="Your availability" data-es="Tu disponibilidad">Your availability</li>
-    </ul>
-    <div class="contact-actions">
-      <a class="btn btn-primary" href="https://wa.me/34686959012" target="_blank" rel="noopener" data-en="Message on WhatsApp" data-es="Escríbenos por WhatsApp">Message on WhatsApp</a>
-      <a class="btn btn-ghost" href="tel:+34686959012">Call +34 686 959 012</a>
-    </div>
   </div>
 </section>
 
