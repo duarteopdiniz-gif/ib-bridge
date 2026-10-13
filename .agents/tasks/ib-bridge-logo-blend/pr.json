@@ -1,0 +1,8 @@
+{
+  "url": "https://github.com/duarteopdiniz-gif/ib-bridge/pull/2",
+  "number": 2,
+  "title": "Blend IB Bridge logo into dark hero/footer (remove white chip)",
+  "branch": "fix/logo-blend-dark-bg",
+  "base": "main",
+  "state": "open"
+}

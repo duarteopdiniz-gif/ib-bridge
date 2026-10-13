@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/duarteopdiniz-gif/ib-bridge/pull/3",
+  "html_url": "https://github.com/duarteopdiniz-gif/ib-bridge/pull/3",
+  "number": 3,
+  "state": "open",
+  "title": "Remove IB Bridge logo from dark hero/footer (owner-authorized fallback)",
+  "head": "fix/logo-dark-variant",
+  "base": "main",
+  "repo": "duarteopdiniz-gif/ib-bridge",
+  "outcome": "removal-fallback",
+  "created_at": "2026-10-13T07:57:28Z"
+}
