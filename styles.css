@@ -102,11 +102,6 @@ a { color: var(--teal-dark); text-decoration: none; }
 .hero-arcs { position: absolute; top: 8%; left: 0; width: 100%; height: 60%; }
 .hero-inner { position: relative; max-width: 720px; }
 
-.logo-chip {
-  display: inline-flex; align-items: center; justify-content: center;
-  background: #fff; border-radius: var(--radius); padding: 14px 22px;
-  box-shadow: var(--shadow-lift);
-}
 .hero-logo-wrap { margin-bottom: 22px; }
 .hero-logo { height: 104px; width: auto; display: block; }
 
