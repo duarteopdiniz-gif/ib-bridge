@@ -32,12 +32,11 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
   btn.addEventListener('click', () => setLang(btn.dataset.lang));
 });
 
-// Restore saved language, or auto-pick Spanish for Spanish-speaking browsers
+// Default to English on first visit; remember the visitor's choice after that
 (function initLang() {
   let saved = null;
   try { saved = localStorage.getItem('ibbridge-lang'); } catch (e) {}
-  const browserEs = (navigator.language || '').toLowerCase().startsWith('es');
-  setLang(saved || (browserEs ? 'es' : 'en'));
+  setLang(saved || 'en');
 })();
 
 // ===== Current year in footer =====
