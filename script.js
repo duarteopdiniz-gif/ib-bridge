@@ -163,15 +163,48 @@ document.getElementById('year').textContent = new Date().getFullYear();
   ['mouseenter', 'focusin'].forEach((ev) => viewport.addEventListener(ev, stopAuto));
   ['mouseleave', 'focusout'].forEach((ev) => viewport.addEventListener(ev, startAuto));
 
-  // Touch swipe
-  let x0 = null;
-  track.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; stopAuto(); }, { passive: true });
-  track.addEventListener('touchend', (e) => {
-    if (x0 === null) return;
-    const dx = e.changedTouches[0].clientX - x0;
-    if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
-    x0 = null; startAuto();
+  // --- Drag / swipe to scroll through reviews (Pointer Events: mouse + touch) ---
+  let dragging = false, startX = 0, startOffset = 0, moved = 0, pid = null;
+
+  track.addEventListener('pointerdown', (e) => {
+    if (animating) return;
+    // ignore drags that start on an interactive element (e.g. Read more)
+    if (e.target.closest('button, a')) return;
+    dragging = true; moved = 0;
+    startX = e.clientX;
+    startOffset = offsetFor(index);
+    pid = e.pointerId;
+    try { track.setPointerCapture(pid); } catch (err) {}
+    stopAuto();
+    track.style.transition = 'none';
+    track.classList.add('is-dragging');
   });
+
+  track.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    moved = e.clientX - startX;
+    track.style.transform = 'translateX(' + (-(startOffset - moved)) + 'px)';
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    if (pid !== null) { try { track.releasePointerCapture(pid); } catch (err) {} pid = null; }
+    track.classList.remove('is-dragging');
+    const threshold = Math.max(40, stepPx() * 0.2);
+    if (moved <= -threshold) move(1);
+    else if (moved >= threshold) move(-1);
+    else { layout(true); } // snap back
+    startAuto();
+  }
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+  track.addEventListener('pointerleave', endDrag);
+
+  // Swallow the click that follows a real drag so it doesn't trigger card links
+  track.addEventListener('click', (e) => {
+    if (Math.abs(moved) > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
 
   window.addEventListener('resize', () => layout(false));
   requestAnimationFrame(() => { layout(false); syncDots(); startAuto(); });
