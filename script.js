@@ -43,7 +43,7 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
 // ===== Current year in footer =====
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// ===== Reviews carousel =====
+// ===== Reviews carousel (native scroll + snap, loop-aware) =====
 (function initReviews() {
   const track = document.getElementById('reviews-track');
   if (!track) return;
@@ -72,52 +72,19 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
   originals.forEach(setupReadMore);
 
-  // Multi-card viewport with a seamless infinite loop.
-  // We clone the whole set before AND after the originals, so there are always
-  // enough cards to fill the visible window past either edge.
-  const viewport = document.createElement('div');
-  viewport.className = 'reviews-viewport';
-  track.parentNode.insertBefore(viewport, track);
-  viewport.appendChild(track);
-
+  // Clone the full set before and after so the user can keep scrolling past
+  // either edge; we invisibly jump back into the "real" middle band.
   const headClones = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
   const tailClones = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
   headClones.forEach((k) => track.insertBefore(k, originals[0]));
   tailClones.forEach((k) => track.appendChild(k));
-  const all = Array.from(track.children); // [head(n)][orig(n)][tail(n)]
 
-  // Responsive card sizing: ~1 card on phones, up to 3 on desktop
-  function applySizing() {
-    const vw = viewport.clientWidth;
-    let per = 3, gap = 20;
-    if (vw < 560) { per = 1; gap = 16; }
-    else if (vw < 920) { per = 2; gap = 18; }
-    const cardW = Math.floor((vw - gap * (per - 1)) / per);
-    track.style.setProperty('--rev-gap', gap + 'px');
-    all.forEach((c) => { c.style.width = cardW + 'px'; });
-    return { gap, cardW };
-  }
-
-  const stepPx = () => {
-    const r = applySizing();
-    return r.cardW + r.gap;
-  };
-
-  let index = 0; // logical index into originals (0..n-1); start on first real card
-  let animating = false;
-
-  function offsetFor(logical) {
-    // position of originals[logical] = after n head clones
-    return (n + logical) * stepPx();
-  }
-  function layout(animate) {
-    track.style.transition = animate ? 'transform .5s ease' : 'none';
-    track.style.transform = 'translateX(' + (-offsetFor(index)) + 'px)';
-  }
-  function syncDots() {
-    const r = ((index % n) + n) % n;
-    dots.forEach((d, i) => d.classList.toggle('active', i === r));
-  }
+  // Measured geometry (recomputed on resize). step = card width + gap.
+  let stepPx = 1;
+  function gap() { return parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '20') || 20; }
+  function measure() { stepPx = originals[0].getBoundingClientRect().width + gap(); }
+  function bandStart() { return n * stepPx; } // scrollLeft that shows the first real card at the left edge
+  function setWidth() { return n * stepPx; }   // width of one full set of n cards
 
   // Dots: one per real review
   dotsWrap.innerHTML = '';
@@ -126,86 +93,129 @@ document.getElementById('year').textContent = new Date().getFullYear();
     b.type = 'button';
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-label', 'Go to review ' + (i + 1));
-    b.addEventListener('click', () => { restartAuto(); goTo(i); });
+    b.addEventListener('click', () => { restartAuto(); goToLogical(i, true); });
     dotsWrap.appendChild(b);
     return b;
   });
 
-  function move(dir) {
-    if (animating) return;
-    animating = true;
-    index += dir;
-    layout(true);
-    syncDots();
+  // Logical position: how many cards away from the first real card (can be
+  // negative or >= n because of the clone bands). The real review index is
+  // this value reduced modulo n.
+  function logicalFromScroll() { return (track.scrollLeft - bandStart()) / stepPx; }
+  function realIndex() {
+    const r = Math.round(logicalFromScroll());
+    return ((r % n) + n) % n;
   }
-  function goTo(i) {
-    if (animating) return;
-    animating = true;
-    index = i;
-    layout(true);
-    syncDots();
+  function syncDots() {
+    const r = realIndex();
+    dots.forEach((d, i) => d.classList.toggle('active', i === r));
   }
-  track.addEventListener('transitionend', () => {
-    // Keep `index` within 0..n-1 by snapping (no animation) to the equivalent real card
-    if (index >= n) { index -= n; layout(false); }
-    else if (index < 0) { index += n; layout(false); }
+
+  // Instant, invisible jump that temporarily disables scroll-snap so the browser
+  // doesn't fight us by re-snapping the position we set.
+  function jumpBy(delta) {
+    const prevSnap = track.style.scrollSnapType;
+    const prevBehavior = track.style.scrollBehavior;
+    track.style.scrollSnapType = 'none';
+    track.style.scrollBehavior = 'auto';
+    track.scrollLeft += delta;
+    // Force layout so the assignment sticks before we restore snapping.
+    void track.offsetWidth;
+    track.style.scrollSnapType = prevSnap;
+    track.style.scrollBehavior = prevBehavior;
+  }
+
+  // Seamless loop: once the scroll settles, if we've drifted a full set into
+  // either clone band, hop back by one set width (instantly) so the visible
+  // card is unchanged but there's always room to keep going either way.
+  function recenter() {
+    const logical = logicalFromScroll();
+    if (logical <= -n + 0.5) { jumpBy(setWidth()); }
+    else if (logical >= n - 0.5) { jumpBy(-setWidth()); }
+  }
+
+  // Track whether a programmatic smooth scroll is in flight. We only recenter
+  // when the scroll has truly settled (no animation running and velocity ~0),
+  // which avoids the old race where an instant jump fought the smooth animation.
+  let animating = false;
+  let settleTimer = null;
+  let rafPending = false;
+  function onScroll() {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => { syncDots(); rafPending = false; });
+    }
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(onSettle, 150);
+  }
+  function onSettle() {
     animating = false;
-  });
+    recenter();
+    syncDots();
+  }
+  track.addEventListener('scroll', onScroll, { passive: true });
 
-  if (next) next.addEventListener('click', () => { restartAuto(); move(1); });
-  if (prev) prev.addEventListener('click', () => { restartAuto(); move(-1); });
+  // Move to an absolute logical position. When smooth is false the jump is
+  // truly instant: CSS sets scroll-behavior:smooth on the track, so we must
+  // override it inline for the duration of the assignment, otherwise even an
+  // "auto" scrollTo animates and the dots read the wrong card mid-flight.
+  function goToLogical(i, smooth) {
+    const target = bandStart() + i * stepPx;
+    if (smooth) {
+      animating = true;
+      track.scrollTo({ left: target, behavior: 'smooth' });
+    } else {
+      const prevBehavior = track.style.scrollBehavior;
+      const prevSnap = track.style.scrollSnapType;
+      track.style.scrollBehavior = 'auto';
+      track.style.scrollSnapType = 'none';
+      track.scrollLeft = target;
+      void track.offsetWidth;
+      track.style.scrollBehavior = prevBehavior;
+      track.style.scrollSnapType = prevSnap;
+    }
+  }
 
-  // Auto-rotate — pauses on hover/focus, resumes after
+  // Advance/retreat by exactly one card. Before a move, if we're already at the
+  // edge of the clone band, recenter instantly so a full step of room remains in
+  // the direction we're about to go — guaranteeing a seamless wrap in both
+  // directions (e.g. last real card -> first real card with no snap-back).
+  function move(dir) {
+    // Settle any in-flight state and normalise into the middle band first.
+    recenter();
+    const logical = logicalFromScroll();
+    if (dir > 0 && logical >= n - 1.5) { jumpBy(-setWidth()); }
+    else if (dir < 0 && logical <= -n + 1.5) { jumpBy(setWidth()); }
+    animating = true;
+    track.scrollTo({ left: track.scrollLeft + dir * stepPx, behavior: 'smooth' });
+  }
+  function nextSlide() { move(1); }
+  function prevSlide() { move(-1); }
+  if (next) next.addEventListener('click', () => { restartAuto(); nextSlide(); });
+  if (prev) prev.addEventListener('click', () => { restartAuto(); prevSlide(); });
+
+  // Auto-rotate — pauses while the user interacts, resumes after
   let timer = null;
-  function startAuto() { stopAuto(); timer = setInterval(() => move(1), 5000); }
+  function startAuto() { stopAuto(); timer = setInterval(nextSlide, 5000); }
   function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
   function restartAuto() { stopAuto(); startAuto(); }
-  ['mouseenter', 'focusin'].forEach((ev) => viewport.addEventListener(ev, stopAuto));
-  ['mouseleave', 'focusout'].forEach((ev) => viewport.addEventListener(ev, startAuto));
+  ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach((ev) =>
+    track.addEventListener(ev, stopAuto, { passive: true }));
+  ['mouseleave', 'touchend', 'pointerup'].forEach((ev) =>
+    track.addEventListener(ev, () => { restartAuto(); }, { passive: true }));
 
-  // --- Drag / swipe to scroll through reviews (Pointer Events: mouse + touch) ---
-  let dragging = false, startX = 0, startOffset = 0, moved = 0, pid = null;
-
-  track.addEventListener('pointerdown', (e) => {
-    if (animating) return;
-    // ignore drags that start on an interactive element (e.g. Read more)
-    if (e.target.closest('button, a')) return;
-    dragging = true; moved = 0;
-    startX = e.clientX;
-    startOffset = offsetFor(index);
-    pid = e.pointerId;
-    try { track.setPointerCapture(pid); } catch (err) {}
-    stopAuto();
-    track.style.transition = 'none';
-    track.classList.add('is-dragging');
+  window.addEventListener('resize', () => {
+    const current = realIndex();
+    measure();
+    goToLogical(current, false);
+    syncDots();
   });
 
-  track.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    moved = e.clientX - startX;
-    track.style.transform = 'translateX(' + (-(startOffset - moved)) + 'px)';
-  });
-
-  function endDrag() {
-    if (!dragging) return;
-    dragging = false;
-    if (pid !== null) { try { track.releasePointerCapture(pid); } catch (err) {} pid = null; }
-    track.classList.remove('is-dragging');
-    const threshold = Math.max(40, stepPx() * 0.2);
-    if (moved <= -threshold) move(1);
-    else if (moved >= threshold) move(-1);
-    else { layout(true); } // snap back
+  // Start positioned on the first real card
+  requestAnimationFrame(() => {
+    measure();
+    goToLogical(0, false);
+    syncDots();
     startAuto();
-  }
-  track.addEventListener('pointerup', endDrag);
-  track.addEventListener('pointercancel', endDrag);
-  track.addEventListener('pointerleave', endDrag);
-
-  // Swallow the click that follows a real drag so it doesn't trigger card links
-  track.addEventListener('click', (e) => {
-    if (Math.abs(moved) > 6) { e.preventDefault(); e.stopPropagation(); }
-  }, true);
-
-  window.addEventListener('resize', () => layout(false));
-  requestAnimationFrame(() => { layout(false); syncDots(); startAuto(); });
+  });
 })();
