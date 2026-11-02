@@ -63,7 +63,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
       if (text.scrollHeight - text.clientHeight > 4) { btn.hidden = false; }
       else { card.classList.remove('is-clamped'); }
     });
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const expanded = card.classList.toggle('is-expanded');
       card.classList.toggle('is-clamped', !expanded);
       btn.setAttribute('aria-expanded', String(expanded));
@@ -71,79 +72,87 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
   originals.forEach(setupReadMore);
 
-  // Clone the full set before and after the originals for a seamless infinite loop
-  const head = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
-  const tail = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
-  head.forEach((k) => track.insertBefore(k, originals[0]));
-  tail.forEach((k) => track.appendChild(k));
-  const all = Array.from(track.querySelectorAll('.review-card')); // head(n) + originals(n) + tail(n)
+  // Transform-based viewport: one clone of the last card at the front and the
+  // first card at the end => [clone(last), o0..o(n-1), clone(first)]
+  const viewport = document.createElement('div');
+  viewport.className = 'reviews-viewport';
+  track.parentNode.insertBefore(viewport, track);
+  viewport.appendChild(track);
 
-  // Dots: exactly one per real review
+  const firstClone = originals[0].cloneNode(true);
+  const lastClone = originals[n - 1].cloneNode(true);
+  [firstClone, lastClone].forEach((c) => { c.setAttribute('aria-hidden', 'true'); setupReadMore(c); });
+  track.insertBefore(lastClone, originals[0]);
+  track.appendChild(firstClone);
+
+  const slides = Array.from(track.children); // n + 2
+  let pos = 1;          // start on the first real card
+  let animating = false;
+
+  function width() { return viewport.clientWidth; }
+  function layout(animate) {
+    track.style.transition = animate ? 'transform .5s ease' : 'none';
+    track.style.transform = 'translateX(' + (-pos * width()) + 'px)';
+  }
+  function realIndex() { return ((pos - 1) % n + n) % n; }
+  function syncDots() {
+    const r = realIndex();
+    dots.forEach((d, i) => d.classList.toggle('active', i === r));
+  }
+
+  // Dots: one per real review
   dotsWrap.innerHTML = '';
   const dots = originals.map((_, i) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-label', 'Go to review ' + (i + 1));
-    b.addEventListener('click', () => { stopAuto(); goTo(i, true); startAuto(); });
+    b.addEventListener('click', () => { restartAuto(); goReal(i); });
     dotsWrap.appendChild(b);
     return b;
   });
 
-  const padLeft = () => parseInt(getComputedStyle(track).paddingLeft || '0', 10);
-  const step = () => (all[1] ? all[1].offsetLeft - all[0].offsetLeft : all[0].offsetWidth);
-  const baseLeft = () => all[n].offsetLeft - padLeft(); // scrollLeft that shows original #0 at the start
-  let index = 0; // logical index into the ORIGINAL set (can be negative/over n during wrap)
-
-  function positionTo(logical, smooth) {
-    const target = (all[n + logical] ? all[n + logical].offsetLeft - padLeft() : baseLeft() + logical * step());
-    track.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+  function move(dir) {
+    if (animating) return;
+    animating = true;
+    pos += dir;
+    layout(true);
+    syncDots();
   }
-  function syncDots(logical) {
-    const active = ((logical % n) + n) % n;
-    dots.forEach((d, i) => d.classList.toggle('active', i === active));
+  function goReal(i) { // jump to a specific real card (via dots)
+    if (animating) return;
+    pos = i + 1;
+    layout(true);
+    syncDots();
   }
-  function goTo(logical, smooth) { index = logical; positionTo(logical, smooth); syncDots(logical); }
-
-  // After a scroll settles on a clone, jump invisibly to the matching real card
-  let wrapTimer = null;
-  function handleEdges() {
-    clearTimeout(wrapTimer);
-    wrapTimer = setTimeout(() => {
-      const rel = Math.round((track.scrollLeft - baseLeft()) / step());
-      const norm = ((rel % n) + n) % n;
-      if (rel !== norm) { index = norm; positionTo(norm, false); } // snap clone -> real
-      else { index = rel; }
-      syncDots(index);
-    }, 160);
-  }
-
-  function nextSlide() { index = index + 1; positionTo(index, true); syncDots(index); }
-  function prevSlide() { index = index - 1; positionTo(index, true); syncDots(index); }
-  if (next) next.addEventListener('click', () => { stopAuto(); nextSlide(); startAuto(); });
-  if (prev) prev.addEventListener('click', () => { stopAuto(); prevSlide(); startAuto(); });
-
-  let ticking = false;
-  track.addEventListener('scroll', () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(() => {
-        const rel = Math.round((track.scrollLeft - baseLeft()) / step());
-        syncDots(rel);
-        ticking = false;
-      });
-    }
-    handleEdges();
+  track.addEventListener('transitionend', () => {
+    // When we land on a clone, snap (without animation) to the real twin
+    if (pos === slides.length - 1) { pos = 1; layout(false); }
+    else if (pos === 0) { pos = n; layout(false); }
+    animating = false;
   });
 
-  // Auto-rotate (spin) — pauses on hover/touch, resumes after
-  let timer = null;
-  function startAuto() { stopAuto(); timer = setInterval(nextSlide, 4500); }
-  function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
-  ['mouseenter', 'focusin', 'touchstart', 'pointerdown'].forEach((ev) =>
-    track.addEventListener(ev, stopAuto, { passive: true }));
-  track.addEventListener('mouseleave', startAuto);
+  if (next) next.addEventListener('click', () => { restartAuto(); move(1); });
+  if (prev) prev.addEventListener('click', () => { restartAuto(); move(-1); });
 
-  window.addEventListener('resize', () => positionTo(index, false));
-  requestAnimationFrame(() => { positionTo(0, false); syncDots(0); startAuto(); });
+  // Auto-rotate
+  let timer = null;
+  function startAuto() { stopAuto(); timer = setInterval(() => move(1), 5000); }
+  function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+  function restartAuto() { stopAuto(); startAuto(); }
+  ['mouseenter', 'focusin'].forEach((ev) => viewport.addEventListener(ev, stopAuto));
+  ['mouseleave', 'focusout'].forEach((ev) => viewport.addEventListener(ev, startAuto));
+
+  // Touch swipe
+  let x0 = null;
+  track.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; stopAuto(); }, { passive: true });
+  track.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
+    x0 = null; startAuto();
+  });
+
+  window.addEventListener('resize', () => layout(false));
+  requestAnimationFrame(() => { layout(false); syncDots(); startAuto(); });
 })();
