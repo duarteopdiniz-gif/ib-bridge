@@ -72,31 +72,50 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
   originals.forEach(setupReadMore);
 
-  // Transform-based viewport: one clone of the last card at the front and the
-  // first card at the end => [clone(last), o0..o(n-1), clone(first)]
+  // Multi-card viewport with a seamless infinite loop.
+  // We clone the whole set before AND after the originals, so there are always
+  // enough cards to fill the visible window past either edge.
   const viewport = document.createElement('div');
   viewport.className = 'reviews-viewport';
   track.parentNode.insertBefore(viewport, track);
   viewport.appendChild(track);
 
-  const firstClone = originals[0].cloneNode(true);
-  const lastClone = originals[n - 1].cloneNode(true);
-  [firstClone, lastClone].forEach((c) => { c.setAttribute('aria-hidden', 'true'); setupReadMore(c); });
-  track.insertBefore(lastClone, originals[0]);
-  track.appendChild(firstClone);
+  const headClones = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
+  const tailClones = originals.map((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); setupReadMore(k); return k; });
+  headClones.forEach((k) => track.insertBefore(k, originals[0]));
+  tailClones.forEach((k) => track.appendChild(k));
+  const all = Array.from(track.children); // [head(n)][orig(n)][tail(n)]
 
-  const slides = Array.from(track.children); // n + 2
-  let pos = 1;          // start on the first real card
+  // Responsive card sizing: ~1 card on phones, up to 3 on desktop
+  function applySizing() {
+    const vw = viewport.clientWidth;
+    let per = 3, gap = 20;
+    if (vw < 560) { per = 1; gap = 16; }
+    else if (vw < 920) { per = 2; gap = 18; }
+    const cardW = Math.floor((vw - gap * (per - 1)) / per);
+    track.style.setProperty('--rev-gap', gap + 'px');
+    all.forEach((c) => { c.style.width = cardW + 'px'; });
+    return { gap, cardW };
+  }
+
+  const stepPx = () => {
+    const r = applySizing();
+    return r.cardW + r.gap;
+  };
+
+  let index = 0; // logical index into originals (0..n-1); start on first real card
   let animating = false;
 
-  function width() { return viewport.clientWidth; }
+  function offsetFor(logical) {
+    // position of originals[logical] = after n head clones
+    return (n + logical) * stepPx();
+  }
   function layout(animate) {
     track.style.transition = animate ? 'transform .5s ease' : 'none';
-    track.style.transform = 'translateX(' + (-pos * width()) + 'px)';
+    track.style.transform = 'translateX(' + (-offsetFor(index)) + 'px)';
   }
-  function realIndex() { return ((pos - 1) % n + n) % n; }
   function syncDots() {
-    const r = realIndex();
+    const r = ((index % n) + n) % n;
     dots.forEach((d, i) => d.classList.toggle('active', i === r));
   }
 
@@ -107,7 +126,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
     b.type = 'button';
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-label', 'Go to review ' + (i + 1));
-    b.addEventListener('click', () => { restartAuto(); goReal(i); });
+    b.addEventListener('click', () => { restartAuto(); goTo(i); });
     dotsWrap.appendChild(b);
     return b;
   });
@@ -115,27 +134,28 @@ document.getElementById('year').textContent = new Date().getFullYear();
   function move(dir) {
     if (animating) return;
     animating = true;
-    pos += dir;
+    index += dir;
     layout(true);
     syncDots();
   }
-  function goReal(i) { // jump to a specific real card (via dots)
+  function goTo(i) {
     if (animating) return;
-    pos = i + 1;
+    animating = true;
+    index = i;
     layout(true);
     syncDots();
   }
   track.addEventListener('transitionend', () => {
-    // When we land on a clone, snap (without animation) to the real twin
-    if (pos === slides.length - 1) { pos = 1; layout(false); }
-    else if (pos === 0) { pos = n; layout(false); }
+    // Keep `index` within 0..n-1 by snapping (no animation) to the equivalent real card
+    if (index >= n) { index -= n; layout(false); }
+    else if (index < 0) { index += n; layout(false); }
     animating = false;
   });
 
   if (next) next.addEventListener('click', () => { restartAuto(); move(1); });
   if (prev) prev.addEventListener('click', () => { restartAuto(); move(-1); });
 
-  // Auto-rotate
+  // Auto-rotate — pauses on hover/focus, resumes after
   let timer = null;
   function startAuto() { stopAuto(); timer = setInterval(() => move(1), 5000); }
   function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
