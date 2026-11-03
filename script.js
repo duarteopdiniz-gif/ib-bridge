@@ -42,6 +42,19 @@ document.querySelectorAll('.lang-btn').forEach((btn) => {
 // ===== Current year in footer =====
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// ===== Reviews: animate the 100% ring when it scrolls into view =====
+(function initRing() {
+  const score = document.querySelector('.reviews-score');
+  if (!score) return;
+  if (!('IntersectionObserver' in window)) { score.classList.add('animate'); return; }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { score.classList.add('animate'); obs.disconnect(); }
+    });
+  }, { threshold: 0.4 });
+  obs.observe(score);
+})();
+
 // ===== Reviews carousel (native scroll + snap, loop-aware) =====
 (function initReviews() {
   const track = document.getElementById('reviews-track');
