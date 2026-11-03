@@ -365,11 +365,15 @@ a { color: var(--teal-dark); text-decoration: none; }
   animation: ring-fill 1.1s ease forwards;
 }
 @keyframes ring-fill { from { stroke-dashoffset: 326.7; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .score-ring .ring-fill { stroke-dashoffset: 0; }
+  .reviews-score.animate .ring-fill { animation: none; stroke-dashoffset: 0; }
+}
 .score-num { display: flex; flex-direction: column; line-height: 1.1; }
 .score-num b { font-family: "Poppins", sans-serif; font-size: 1.5rem; color: var(--navy); }
 .score-num span { font-size: .82rem; color: var(--ink-soft); }
 
-.reviews-carousel { position: relative; }
+.reviews-carousel { position: relative; background: transparent; }
 .reviews-track {
   display: flex; flex-wrap: nowrap; gap: 20px; align-items: flex-start;
   overflow-x: auto; overflow-y: hidden;
@@ -377,6 +381,7 @@ a { color: var(--teal-dark); text-decoration: none; }
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; padding: 6px 2px 12px;
   overscroll-behavior-x: contain;
+  background: transparent;
 }
 .reviews-track::-webkit-scrollbar { display: none; }
 .review-card {
@@ -390,7 +395,7 @@ a { color: var(--teal-dark); text-decoration: none; }
   .reviews-track { gap: 18px; }
 }
 @media (max-width: 560px) {
-  .review-card { flex-basis: 100%; }
+  .review-card { flex-basis: 88%; }
   .reviews-track { gap: 16px; }
 }
 .review-card.review-featured { border-color: var(--teal); box-shadow: var(--shadow-lift); }
